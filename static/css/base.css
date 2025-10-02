@@ -1,0 +1,111 @@
+html,
+body {
+  font-family: "SUSE Mono", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #1a1a1a;
+  color: azure;
+}
+
+.navbar {
+  height: 56px;
+  color: azure;
+}
+
+.navbar-brand {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-left: 30px;
+}
+
+.nav-link {
+  font-size: 1.7rem;
+  font-weight: 550;
+  color: #1a1a1a;
+  margin-right: 50px;
+}
+
+.nav-link:hover,
+.navbar-brand:hover {
+  color: #a40000;
+}
+
+.hero-section {
+  background: url("../images/landing-image.jpeg") center center;
+  min-height: 100vh;
+  padding-top: 56px;
+}
+
+.hero-section h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 10rem;
+  color: rgba(0, 0, 0, 0.75);
+  text-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.hero-section h3 {
+  font-size: 3.5rem;
+  color: #a40000;
+}
+
+#about {
+  padding-top: 150px;
+  min-height: 100vh;
+}
+
+.about-title {
+  font-size: 6rem;
+  color: #a40000;
+  font-weight: 700;
+  margin-bottom: 50px;
+}
+
+.about-content {
+  max-width: 70%;
+  margin-left: auto;
+}
+
+.about-text {
+  font-size: 1.3rem;
+}
+
+.about-text span {
+  color: #a40000;
+  font-weight: 800;
+}
+
+/* ------------- */
+/* Media Queries */
+/* ------------- */
+
+/* Tablet screena and smaller */
+@media (max-width: 992px) {
+  .hero-section h1 {
+    font-size: 7.5rem;
+  }
+
+  .hero-section h3 {
+    font-size: 3rem;
+  }
+
+  .about-content {
+    min-width: 100%;
+  }
+}
+
+/* Mobile screens and smaller */
+@media (max-width: 767px) {
+  .hero-section {
+    background: url("../images/landing-image.jpeg") no-repeat center
+      center/cover;
+  }
+
+  .hero-section h1 {
+    font-size: 5rem;
+  }
+
+  .hero-section h3 {
+    font-size: 2.5rem;
+  }
+}
