@@ -1,4 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
+<!-- About section -->
 <section class="container" id="about">
   <h1 class="about-title">HELLO THERE,</h1>
   <div class="about-content">
@@ -22,4 +23,166 @@
     </p>
   </div>
 </section>
+<!-- Projects section -->
+<section class="projects-section" id="projects">
+  <div id="projects-overview">
+    <h2 class="projects-title">My Projects</h2>
+    <p class="projects-subtitle">Click on any project to learn more.</p>
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+
+  <div class="project-detail" id="project-detail"></div>
+</section>
+
+<script>
+  const projects = [
+    {
+      id: 1,
+      title: "Canine Compadre",
+      shortDesc: "A booking wesbite for local dog walker.",
+      image: "{% static 'images/canine-compadre.png' %}",
+      fullDescription:
+        "A full-featured booking and management system built for Axel Bevis's professional dog walking service. The platform enables clients to seamlessly book group walks or request individual walking sessions while intelligently managing time slot availability and capacity constraints. The application handles complex scheduling logic to prevent double-bookings while maintaining clear communication about available time windows. Built with a focus on reliability and user experience for a small business context.",
+      technologies: ["Python", "Django", "Javascript", "Bootstrap"],
+      highlights: [
+        "Dual Booking System: Separate workflows for group walks (limited to 4 dogs per session) and individual walk requests",
+        "Smart Scheduling: Automated time slot management with three daily group walk sessions (10AM-12PM, 2PM-4PM, 6PM-8PM) and buffer time protection",
+        "Availability Management: Real-time display of available time slots with clear restrictions to prevent scheduling conflicts",
+        "User-Friendly Interface: Clean, intuitive design that guides pet owners through the booking process",
+      ],
+      githubLink: "https://github.com/Willr-hawkins/canine-compadre",
+      liveLink: "https://caninecompadre.co.uk/",
+    },
+    {
+      id: 2,
+      title: "Coiling Clay",
+      shortDesc: "A full stack E-commerce online ceramics store.",
+      image: "{% static 'images/coiling-clay.jpg' %}",
+      fullDescription:
+        "A feature-rich e-commerce platform built for an independent ceramics store specializing in handmade, artisanal pottery. The application delivers a complete online shopping experience with advanced user engagement features and robust backend functionality.",
+      technologies: ["Django", "PostgresSQL", "Stripe API", "AWS S3"],
+      highlights: [
+        "Complete E-Commerce Functionality: Full shopping cart system with secure Stripe payment integration and order processing",
+        "User Authentication & Profiles: Account management with saved shipping information and order history tracking",
+        "Advanced Product System: Dynamic product ratings calculated from user reviews, category filtering, and search functionality",
+        "Admin Product Management: Intuitive interface for adding, editing, and deleting products directly from the frontend",
+        "Marketing Integration: Newsletter signup via Mailchimp and Facebook business page integration",
+      ],
+      githubLink: "https://github.com/Willr-hawkins/coiling-clay1",
+      liveLink: null,
+    },
+    {
+      id: 3,
+      title: "Maddocks Owlery",
+      shortDesc: "Informative website for an Owlery conservation.",
+      image: "{% static 'images/maddocks-owlery.jpg' %}",
+      fullDescription:
+        "A compelling digital presence built for a wildlife sanctuary and conservation project in North Devon. The website serves as both an educational platform and a community engagement tool, documenting the transformation of a former riding stables into a dedicated nature recovery site. Created for Simon Maddocks' 35-acre conservation initiative in partnership with the National Trust, focusing on habitat restoration and biodiversity support. The site chronicles the construction of a purpose-built wildlife tower designed to last a century, addressing the critical issue of habitat loss for barn owls, bats, and other native species.",
+      technologies: [
+        "Django",
+        "HTML",
+        "CSS + Bootstrap",
+        "Javascript",
+        "AWS S3",
+      ],
+      highlights: [
+        "Visual Storytelling: Interactive image slideshow documenting the construction journey of the wildlife tower from conception to completion",
+        "Multi-Page Architecture: Organized content sections including the project story, conservation initiatives, gallery, news updates, and live wildlife feed integration",
+        "Educational Content: Detailed information about land stewardship practices, including the use of Mangalica pigs and Belted Galloway cattle for natural land management",
+        "Future-Ready Infrastructure: Prepared for live camera feeds to share real-time wildlife activity with visitors",
+      ],
+      githubLink: "https://github.com/Willr-hawkins/MaddocksOwlery",
+      liveLink: "https://www.maddocksowlery.co.uk/",
+    },
+  ];
+
+  // Render project cards
+  function renderProjects() {
+    const grid = document.getElementById("projects-grid");
+    grid.innerHTML = projects
+      .map(
+        (project) => `
+          <div class="project-card" onclick="showProjectDetail(${project.id})">
+              <img src="${project.image}" alt="${project.title}">
+              <div class="project-card-content">
+                  <h3>${project.title}</h3>
+                  <p>${project.shortDesc}</p>
+              </div>
+          </div>
+      `
+      )
+      .join("");
+  }
+
+  // Show project detail
+  function showProjectDetail(projectId) {
+    const project = projects.find((p) => p.id === projectId);
+    const detailView = document.getElementById("project-detail");
+    const overview = document.getElementById("projects-overview");
+
+    detailView.innerHTML = `
+          <button class="back-button" onclick="showProjectsOverview()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              Back to Projects
+          </button>
+
+          <div class="detail-card">
+              <img src="${project.image}" alt="${project.title}">
+              <h2>${project.title}</h2>
+              <p class="description">${project.fullDescription}</p>
+
+              <h3>Technologies Used</h3>
+              <div class="tech-tags">
+                  ${project.technologies
+                    .map((tech) => `<span class="tech-tag">${tech}</span>`)
+                    .join("")}
+              </div>
+
+              <h3>Key Features</h3>
+              <ul class="highlights-list">
+                  ${project.highlights
+                    .map((highlight) => `<li>${highlight}</li>`)
+                    .join("")}
+              </ul>
+
+              ${
+                project.liveLink
+                  ? `
+                <a href="${project.liveLink}" target ="_blank" rel="noopener noreferrer" class="github-link" style="margin-right: 12px;">
+                  View Live Site  
+                </a>
+              `
+                  : ""
+              }
+              ${
+                project.githubLink
+                  ? `
+                <a href="${project.githubLink}" target ="_blank" rel="noopener noreferrer" class="github-link" style="background: #344155">
+                  View on GitHub  
+                </a>
+              `
+                  : ""
+              }
+          </div>
+      `;
+
+    overview.classList.add("hidden");
+    detailView.classList.add("active");
+  }
+
+  // Show projects overview
+  function showProjectsOverview() {
+    const detailView = document.getElementById("project-detail");
+    const overview = document.getElementById("projects-overview");
+
+    detailView.classList.remove("active");
+    overview.classList.remove("hidden");
+  }
+
+  // Initialize
+  renderProjects();
+</script>
+
 {% endblock %}
