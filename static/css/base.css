@@ -281,6 +281,91 @@ body {
   display: none;
 }
 
+/* Skills section */
+.skills-section {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  padding: 80px 24px;
+  padding-top: 120px !important;
+}
+
+.skills-title {
+  font-size: 4.5rem;
+  font-weight: bold;
+  color: azure;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.skills-subtitle {
+  color: #d1d5db;
+  text-align: center;
+  margin-bottom: 60px;
+  font-size: 1.125rem;
+}
+
+.skills-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.skill-item {
+  margin-bottom: 32px;
+}
+
+.skill-item:last-child {
+  margin-bottom: 0;
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.skill-name {
+  color: azure;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.skill-percentage {
+  color: azure;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.skill-bar-container {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.skill-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #a40000 0%, #dc2626 100%);
+  border-radius: 10px;
+  width: 0;
+  transition: width 1.5s ease-out;
+  box-shadow: 0 0 10px rgba(164, 0, 0, 0.5);
+}
+
+.skill-bar.animate {
+  animation: slideIn 1.5s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    width: 0;
+  }
+}
 /* ------------- */
 /* Media Queries */
 /* ------------- */
@@ -319,7 +404,7 @@ body {
     font-size: 2.5rem;
   }
 
-  .section-title {
+  .projects-title {
     font-size: 2rem;
   }
 
@@ -329,5 +414,21 @@ body {
 
   .projects-grid {
     grid-template-columns: 1fr;
+  }
+
+  .skills-title {
+    font-size: 2rem;
+  }
+
+  .skills-container {
+    padding: 32px 24px;
+  }
+
+  .skill-name {
+    font-size: 1rem;
+  }
+
+  .skill-percentage {
+    font-size: 0.875rem;
   }
 }
