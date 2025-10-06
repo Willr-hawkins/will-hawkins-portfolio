@@ -260,12 +260,17 @@
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const bar = entry.target;
+          const percentage = bar.getAttribute("data-percentage");
+
           if (entry.isIntersecting) {
-            const bar = entry.target;
-            const percentage = bar.getAttribute("data-percentage");
+            // Element is in viewport - animate
             bar.style.width = percentage + "%";
             bar.classList.add("animate");
-            observer.unobserve(bar);
+          } else {
+            // Element is out of viewport - reset
+            bar.style.width = "0%";
+            bar.classList.remove("animate");
           }
         });
       },
