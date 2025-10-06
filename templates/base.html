@@ -6,7 +6,7 @@
     {% block meta %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Will Hawkins Portolio</title>
+    <title>Will Hawkins Portfolio</title>
     {% endblock %} {% block corecss %}
     <!-- Bootstrap CSS -->
     <link
@@ -48,15 +48,10 @@
     <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#home">Portfolio</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
+        <button class="navbar-toggler d-lg-none" type="button" id="navToggler">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse d-none d-lg-flex">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
             <li class="nav-item">
@@ -68,11 +63,30 @@
             <li class="nav-item">
               <a class="nav-link" href="#skills">Skills</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="">Contact</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
+
+    <!-- Side Navigation Menu -->
+    <div class="side-nav" id="sideNav">
+      <button class="close-btn" id="closeBtn">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <ul class="side-nav-links">
+        <li><a href="#home" class="side-nav-link">Home</a></li>
+        <li><a href="#about" class="side-nav-link">About</a></li>
+        <li><a href="#projects" class="side-nav-link">Projects</a></li>
+        <li><a href="#skills" class="side-nav-link">Skills</a></li>
+        <li><a href="#contact" class="side-nav-link">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Overlay -->
+    <div class="side-nav-overlay" id="sideNavOverlay"></div>
 
     <!-- fullscreen Hero Section -->
     <header class="hero-section d-flex align-items-center" id="home">
@@ -84,5 +98,33 @@
 
     <!-- Main Content -->
     <main>{% block content %} {% endblock %}</main>
+
+    <script>
+      const navToggler = document.getElementById("navToggler");
+      const sideNav = document.getElementById("sideNav");
+      const sideNavOverlay = document.getElementById("sideNavOverlay");
+      const closeBtn = document.getElementById("closeBtn");
+      const sideNavLinks = document.querySelectorAll(".side-nav-link");
+
+      function openSideNav() {
+        sideNav.classList.add("active");
+        sideNavOverlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeSideNav() {
+        sideNav.classList.remove("active");
+        sideNavOverlay.classList.remove("active");
+        document.body.style.overflow = "auto";
+      }
+
+      navToggler.addEventListener("click", openSideNav);
+      closeBtn.addEventListener("click", closeSideNav);
+      sideNavOverlay.addEventListener("click", closeSideNav);
+
+      sideNavLinks.forEach((link) => {
+        link.addEventListener("click", closeSideNav);
+      });
+    </script>
   </body>
 </html>
