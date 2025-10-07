@@ -392,22 +392,24 @@
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          const bar = entry.target;
-          const percentage = bar.getAttribute("data-percentage");
-
           if (entry.isIntersecting) {
-            // Element is in viewport - animate
-            bar.style.width = percentage + "%";
-            bar.classList.add("animate");
+            const bar = entry.target;
+            const percentage = bar.getAttribute("data-percentage");
+
+            // Add a small delay to ensure CSS transition works
+            setTimeout(() => {
+              bar.style.width = percentage + "%";
+            }, 100);
           } else {
-            // Element is out of viewport - reset
+            // Reset when out of view
+            const bar = entry.target;
             bar.style.width = "0%";
-            bar.classList.remove("animate");
           }
         });
       },
       {
-        threshold: 0.5,
+        threshold: 0.3, // Trigger earlier
+        rootMargin: "0px 0px -100px 0px", // Trigger before fully in view
       }
     );
 
@@ -423,6 +425,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     const contactForm = document.getElementById("contact-form");
     const messagesDiv = document.getElementById("contact-messages");
+    const formCard = contactForm ? contactForm.closest(".detail-card") : null;
 
     if (contactForm) {
       contactForm.addEventListener("submit", function (e) {
@@ -449,21 +452,27 @@
           .then((response) => response.json())
           .then((data) => {
             if (data.success) {
-              // Show success message
-              messagesDiv.innerHTML = `
-            <div class="alert alert-success" style="padding: 1rem; border-radius: 8px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;">
-              ${data.message}
+              // Replace entire form with success message
+              formCard.innerHTML = `
+            <div style="text-align: center; padding: 3rem 2rem;">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" style="margin: 0 auto 1.5rem;">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <h3 style="color: azure; font-size: 2rem; margin-bottom: 1rem;">Message Sent Successfully!</h3>
+              <p style="color: #d1d5db; font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem;">
+                ${data.message}
+              </p>
+              <button onclick="location.reload()" class="contact-btn" style="display: inline-block;">
+                Send Another Message
+              </button>
             </div>
           `;
-              // Reset form
-              contactForm.reset();
-              // Scroll to message
-              messagesDiv.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-              });
+
+              // Smooth scroll to the success message
+              formCard.scrollIntoView({ behavior: "smooth", block: "center" });
             } else {
-              // Show error message
+              // Show error message at top
               if (data.message) {
                 messagesDiv.innerHTML = `
               <div class="alert alert-error" style="padding: 1rem; border-radius: 8px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
@@ -482,6 +491,12 @@
                   }
                 }
               }
+
+              // Scroll to messages
+              messagesDiv.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+              });
             }
           })
           .catch((error) => {
