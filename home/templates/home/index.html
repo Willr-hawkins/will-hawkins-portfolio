@@ -104,6 +104,138 @@
   </div>
 </section>
 
+<!-- Contact section -->
+<section class="container" id="contact">
+  <h2 class="contact-title" style="text-align: center">Get In Touch</h2>
+  <p class="contact-subtitle" style="text-align: center">
+    Have a project in mind or want to work together?
+  </p>
+
+  <div
+    id="contact-messages"
+    style="
+      margin-bottom: 2rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    "
+  ></div>
+
+  <div class="detail-card" style="max-width: 800px; margin: 2rem auto">
+    <form method="post" id="contact-form">
+      {% csrf_token %}
+
+      <div class="form-group" style="margin-bottom: 1.5rem">
+        <label
+          for="{{ form.full_name.id_for_label }}"
+          style="
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+          "
+        >
+          {{ form.full_name.label }}
+        </label>
+        {{ form.full_name }}
+        <div
+          id="full_name-error"
+          class="error"
+          style="
+            color: #dc3545;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            display: none;
+          "
+        ></div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem">
+        <label
+          for="{{ form.email.id_for_label }}"
+          style="
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+          "
+        >
+          {{ form.email.label }}
+        </label>
+        {{ form.email }}
+        <div
+          id="email-error"
+          class="error"
+          style="
+            color: #dc3545;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            display: none;
+          "
+        ></div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem">
+        <label
+          for="{{ form.phone_number.id_for_label }}"
+          style="
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+          "
+        >
+          {{ form.phone_number.label }}
+        </label>
+        {{ form.phone_number }}
+        <div
+          id="phone_number-error"
+          class="error"
+          style="
+            color: #dc3545;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            display: none;
+          "
+        ></div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem">
+        <label
+          for="{{ form.message.id_for_label }}"
+          style="
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+          "
+        >
+          {{ form.message.label }}
+        </label>
+        {{ form.message }}
+        <div
+          id="message-error"
+          class="error"
+          style="
+            color: #dc3545;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            display: none;
+          "
+        ></div>
+      </div>
+
+      <button
+        type="submit"
+        class="contact-btn"
+        style="width: 100%; text-align: center; margin-top: 1rem"
+      >
+        Send Message
+      </button>
+    </form>
+  </div>
+</section>
+
 <script>
   const projects = [
     {
@@ -286,6 +418,82 @@
 
   // Initialize on page load
   document.addEventListener("DOMContentLoaded", animateSkillBars);
+
+  // Contact form AJAX submission
+  document.addEventListener("DOMContentLoaded", function () {
+    const contactForm = document.getElementById("contact-form");
+    const messagesDiv = document.getElementById("contact-messages");
+
+    if (contactForm) {
+      contactForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Clear previous errors
+        document.querySelectorAll(".error").forEach((el) => {
+          el.style.display = "none";
+          el.textContent = "";
+        });
+        messagesDiv.innerHTML = "";
+
+        // Get form data
+        const formData = new FormData(contactForm);
+
+        // Submit via fetch
+        fetch("/", {
+          method: "POST",
+          body: formData,
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Show success message
+              messagesDiv.innerHTML = `
+            <div class="alert alert-success" style="padding: 1rem; border-radius: 8px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;">
+              ${data.message}
+            </div>
+          `;
+              // Reset form
+              contactForm.reset();
+              // Scroll to message
+              messagesDiv.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+              });
+            } else {
+              // Show error message
+              if (data.message) {
+                messagesDiv.innerHTML = `
+              <div class="alert alert-error" style="padding: 1rem; border-radius: 8px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+                ${data.message}
+              </div>
+            `;
+              }
+
+              // Show field-specific errors
+              if (data.errors) {
+                for (const [field, errors] of Object.entries(data.errors)) {
+                  const errorDiv = document.getElementById(`${field}-error`);
+                  if (errorDiv) {
+                    errorDiv.textContent = errors.join(", ");
+                    errorDiv.style.display = "block";
+                  }
+                }
+              }
+            }
+          })
+          .catch((error) => {
+            messagesDiv.innerHTML = `
+          <div class="alert alert-error" style="padding: 1rem; border-radius: 8px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+            An error occurred. Please try again.
+          </div>
+        `;
+          });
+      });
+    }
+  });
 </script>
 
 {% endblock %}
